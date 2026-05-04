@@ -20,7 +20,11 @@ namespace Project.Bootstrap
             IReadOnlyList<Card> hand = deck.Draw(5);
 
             Debug.Log($"Card Domain Smoke Test OK | Drawn: {hand.Count} | Remaining: {deck.RemainingCount}");
-            Debug.Log($"First drawn card: {hand[0]}");
+            foreach (Card card in hand)
+            {
+                Debug.Log($"Drawn card: {card}");
+            }
+            //Debug.Log($"First drawn card: {hand[0]}");
         }
     }
 }
