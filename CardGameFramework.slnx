@@ -1,4 +1,4 @@
 ﻿<Solution>
-  <Project Path="Project.Domain.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Project.Domain.csproj" />
 </Solution>

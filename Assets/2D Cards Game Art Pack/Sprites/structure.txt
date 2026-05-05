@@ -1,0 +1,439 @@
+Folder PATH listing
+Volume serial number is 9E33-6C19
+D:.
+|   Backgrounds.meta
+|   Characters.meta
+|   Standard 52 Cards.meta
+|   structure.txt
+|   Tables.meta
+|   
++---Backgrounds
+|       background_1.png
+|       background_1.png.meta
+|       background_2.png
+|       background_2.png.meta
+|       background_3.png
+|       background_3.png.meta
+|       
++---Characters
+|       char_1.png
+|       char_1.png.meta
+|       char_10.png
+|       char_10.png.meta
+|       char_11.png
+|       char_11.png.meta
+|       char_12.png
+|       char_12.png.meta
+|       char_13.png
+|       char_13.png.meta
+|       char_2.png
+|       char_2.png.meta
+|       char_3.png
+|       char_3.png.meta
+|       char_4.png
+|       char_4.png.meta
+|       char_5.png
+|       char_5.png.meta
+|       char_6.png
+|       char_6.png.meta
+|       char_7.png
+|       char_7.png.meta
+|       char_8.png
+|       char_8.png.meta
+|       char_9.png
+|       char_9.png.meta
+|       frame_circle.png
+|       frame_circle.png.meta
+|       frame_quad.png
+|       frame_quad.png.meta
+|       
++---Standard 52 Cards
+|   |   Rect Cards.meta
+|   |   Standard Cards.meta
+|   |   Standard Rounded Cards.meta
+|   |   
+|   +---Rect Cards
+|   |   |   Card Back.meta
+|   |   |   Clubs.meta
+|   |   |   Diamonds.meta
+|   |   |   Hearts.meta
+|   |   |   Spades.meta
+|   |   |   
+|   |   +---Card Back
+|   |   |       card_back_rect_1.png
+|   |   |       card_back_rect_1.png.meta
+|   |   |       card_back_rect_2.png
+|   |   |       card_back_rect_2.png.meta
+|   |   |       card_back_rect_3.png
+|   |   |       card_back_rect_3.png.meta
+|   |   |       
+|   |   +---Clubs
+|   |   |       10club.png
+|   |   |       10club.png.meta
+|   |   |       2club.png
+|   |   |       2club.png.meta
+|   |   |       3club.png
+|   |   |       3club.png.meta
+|   |   |       4club.png
+|   |   |       4club.png.meta
+|   |   |       5club.png
+|   |   |       5club.png.meta
+|   |   |       6club.png
+|   |   |       6club.png.meta
+|   |   |       7club.png
+|   |   |       7club.png.meta
+|   |   |       8club.png
+|   |   |       8club.png.meta
+|   |   |       9club.png
+|   |   |       9club.png.meta
+|   |   |       Aclub.png
+|   |   |       Aclub.png.meta
+|   |   |       Jclub.png
+|   |   |       Jclub.png.meta
+|   |   |       Kclub.png
+|   |   |       Kclub.png.meta
+|   |   |       Q.png
+|   |   |       Q.png.meta
+|   |   |       
+|   |   +---Diamonds
+|   |   |       10diamond.png
+|   |   |       10diamond.png.meta
+|   |   |       2diamond.png
+|   |   |       2diamond.png.meta
+|   |   |       3diamond.png
+|   |   |       3diamond.png.meta
+|   |   |       4diamond.png
+|   |   |       4diamond.png.meta
+|   |   |       5diamond.png
+|   |   |       5diamond.png.meta
+|   |   |       6diamond.png
+|   |   |       6diamond.png.meta
+|   |   |       7diamond.png
+|   |   |       7diamond.png.meta
+|   |   |       8diamond.png
+|   |   |       8diamond.png.meta
+|   |   |       9diamond.png
+|   |   |       9diamond.png.meta
+|   |   |       Adiamond.png
+|   |   |       Adiamond.png.meta
+|   |   |       Jdiamond.png
+|   |   |       Jdiamond.png.meta
+|   |   |       Kdiamond.png
+|   |   |       Kdiamond.png.meta
+|   |   |       Qdiamond.png
+|   |   |       Qdiamond.png.meta
+|   |   |       
+|   |   +---Hearts
+|   |   |       10heart.png
+|   |   |       10heart.png.meta
+|   |   |       2heart.png
+|   |   |       2heart.png.meta
+|   |   |       3heart.png
+|   |   |       3heart.png.meta
+|   |   |       4heart.png
+|   |   |       4heart.png.meta
+|   |   |       5heart.png
+|   |   |       5heart.png.meta
+|   |   |       6heart.png
+|   |   |       6heart.png.meta
+|   |   |       7heart.png
+|   |   |       7heart.png.meta
+|   |   |       8heart.png
+|   |   |       8heart.png.meta
+|   |   |       9heart.png
+|   |   |       9heart.png.meta
+|   |   |       Aheart.png
+|   |   |       Aheart.png.meta
+|   |   |       Jheart.png
+|   |   |       Jheart.png.meta
+|   |   |       Kheart.png
+|   |   |       Kheart.png.meta
+|   |   |       Qheart.png
+|   |   |       Qheart.png.meta
+|   |   |       
+|   |   \---Spades
+|   |           10spade.png
+|   |           10spade.png.meta
+|   |           2spade.png
+|   |           2spade.png.meta
+|   |           3spade.png
+|   |           3spade.png.meta
+|   |           4spade.png
+|   |           4spade.png.meta
+|   |           5spade.png
+|   |           5spade.png.meta
+|   |           6spade.png
+|   |           6spade.png.meta
+|   |           7spade.png
+|   |           7spade.png.meta
+|   |           8spade.png
+|   |           8spade.png.meta
+|   |           9spade.png
+|   |           9spade.png.meta
+|   |           Aspade.png
+|   |           Aspade.png.meta
+|   |           Jspade.png
+|   |           Jspade.png.meta
+|   |           Kspade.png
+|   |           Kspade.png.meta
+|   |           Qspade.png
+|   |           Qspade.png.meta
+|   |           
+|   +---Standard Cards
+|   |   |   Card Back.meta
+|   |   |   Clubs.meta
+|   |   |   Diamonds.meta
+|   |   |   Hearts.meta
+|   |   |   Spades.meta
+|   |   |   
+|   |   +---Card Back
+|   |   |       card_back.png
+|   |   |       card_back.png.meta
+|   |   |       
+|   |   +---Clubs
+|   |   |       10_club.png
+|   |   |       10_club.png.meta
+|   |   |       11_club.png
+|   |   |       11_club.png.meta
+|   |   |       12_club.png
+|   |   |       12_club.png.meta
+|   |   |       13_club.png
+|   |   |       13_club.png.meta
+|   |   |       1_club.png
+|   |   |       1_club.png.meta
+|   |   |       2_club.png
+|   |   |       2_club.png.meta
+|   |   |       3_club.png
+|   |   |       3_club.png.meta
+|   |   |       4_club.png
+|   |   |       4_club.png.meta
+|   |   |       5_club.png
+|   |   |       5_club.png.meta
+|   |   |       6_club.png
+|   |   |       6_club.png.meta
+|   |   |       7_club.png
+|   |   |       7_club.png.meta
+|   |   |       8_club.png
+|   |   |       8_club.png.meta
+|   |   |       9_club.png
+|   |   |       9_club.png.meta
+|   |   |       
+|   |   +---Diamonds
+|   |   |       10_diamond.png
+|   |   |       10_diamond.png.meta
+|   |   |       11_diamond.png
+|   |   |       11_diamond.png.meta
+|   |   |       12_diamond.png
+|   |   |       12_diamond.png.meta
+|   |   |       13_diamond.png
+|   |   |       13_diamond.png.meta
+|   |   |       1_diamond.png
+|   |   |       1_diamond.png.meta
+|   |   |       2_diamond.png
+|   |   |       2_diamond.png.meta
+|   |   |       3_diamond.png
+|   |   |       3_diamond.png.meta
+|   |   |       4_diamond.png
+|   |   |       4_diamond.png.meta
+|   |   |       5_diamond.png
+|   |   |       5_diamond.png.meta
+|   |   |       6_diamond.png
+|   |   |       6_diamond.png.meta
+|   |   |       7_diamond.png
+|   |   |       7_diamond.png.meta
+|   |   |       8_diamond.png
+|   |   |       8_diamond.png.meta
+|   |   |       9_diamond.png
+|   |   |       9_diamond.png.meta
+|   |   |       
+|   |   +---Hearts
+|   |   |       10_heart.png
+|   |   |       10_heart.png.meta
+|   |   |       11_heart.png
+|   |   |       11_heart.png.meta
+|   |   |       12_heart.png
+|   |   |       12_heart.png.meta
+|   |   |       13_heart.png
+|   |   |       13_heart.png.meta
+|   |   |       1_heart.png
+|   |   |       1_heart.png.meta
+|   |   |       2_heart.png
+|   |   |       2_heart.png.meta
+|   |   |       3_heart.png
+|   |   |       3_heart.png.meta
+|   |   |       4_heart.png
+|   |   |       4_heart.png.meta
+|   |   |       5_heart.png
+|   |   |       5_heart.png.meta
+|   |   |       6_heart.png
+|   |   |       6_heart.png.meta
+|   |   |       7_heart.png
+|   |   |       7_heart.png.meta
+|   |   |       8_heart.png
+|   |   |       8_heart.png.meta
+|   |   |       9_heart.png
+|   |   |       9_heart.png.meta
+|   |   |       
+|   |   \---Spades
+|   |           10_spade.png
+|   |           10_spade.png.meta
+|   |           11_spade.png
+|   |           11_spade.png.meta
+|   |           12_spade.png
+|   |           12_spade.png.meta
+|   |           13_spade.png
+|   |           13_spade.png.meta
+|   |           1_spade.png
+|   |           1_spade.png.meta
+|   |           2_spade.png
+|   |           2_spade.png.meta
+|   |           3_spade.png
+|   |           3_spade.png.meta
+|   |           4_spade.png
+|   |           4_spade.png.meta
+|   |           5_spade.png
+|   |           5_spade.png.meta
+|   |           6_spade.png
+|   |           6_spade.png.meta
+|   |           7_spade.png
+|   |           7_spade.png.meta
+|   |           8_spade.png
+|   |           8_spade.png.meta
+|   |           9_spade.png
+|   |           9_spade.png.meta
+|   |           
+|   \---Standard Rounded Cards
+|       |   Card Back.meta
+|       |   Clubs.meta
+|       |   Diamonds.meta
+|       |   Hearts.meta
+|       |   Spades.meta
+|       |   
+|       +---Card Back
+|       |       cardBackBlue.png
+|       |       cardBackBlue.png.meta
+|       |       cardBackGreen.png
+|       |       cardBackGreen.png.meta
+|       |       cardBackRed.png
+|       |       cardBackRed.png.meta
+|       |       
+|       +---Clubs
+|       |       cardClubs_10.png
+|       |       cardClubs_10.png.meta
+|       |       cardClubs_2.png
+|       |       cardClubs_2.png.meta
+|       |       cardClubs_3.png
+|       |       cardClubs_3.png.meta
+|       |       cardClubs_4.png
+|       |       cardClubs_4.png.meta
+|       |       cardClubs_5.png
+|       |       cardClubs_5.png.meta
+|       |       cardClubs_6.png
+|       |       cardClubs_6.png.meta
+|       |       cardClubs_7.png
+|       |       cardClubs_7.png.meta
+|       |       cardClubs_8.png
+|       |       cardClubs_8.png.meta
+|       |       cardClubs_9.png
+|       |       cardClubs_9.png.meta
+|       |       cardClubs_A.png
+|       |       cardClubs_A.png.meta
+|       |       cardClubs_J.png
+|       |       cardClubs_J.png.meta
+|       |       cardClubs_K.png
+|       |       cardClubs_K.png.meta
+|       |       cardClubs_Q.png
+|       |       cardClubs_Q.png.meta
+|       |       
+|       +---Diamonds
+|       |       cardDiamonds_10.png
+|       |       cardDiamonds_10.png.meta
+|       |       cardDiamonds_2.png
+|       |       cardDiamonds_2.png.meta
+|       |       cardDiamonds_3.png
+|       |       cardDiamonds_3.png.meta
+|       |       cardDiamonds_4.png
+|       |       cardDiamonds_4.png.meta
+|       |       cardDiamonds_5.png
+|       |       cardDiamonds_5.png.meta
+|       |       cardDiamonds_6.png
+|       |       cardDiamonds_6.png.meta
+|       |       cardDiamonds_7.png
+|       |       cardDiamonds_7.png.meta
+|       |       cardDiamonds_8.png
+|       |       cardDiamonds_8.png.meta
+|       |       cardDiamonds_9.png
+|       |       cardDiamonds_9.png.meta
+|       |       cardDiamonds_A.png
+|       |       cardDiamonds_A.png.meta
+|       |       cardDiamonds_J.png
+|       |       cardDiamonds_J.png.meta
+|       |       cardDiamonds_K.png
+|       |       cardDiamonds_K.png.meta
+|       |       cardDiamonds_Q.png
+|       |       cardDiamonds_Q.png.meta
+|       |       
+|       +---Hearts
+|       |       cardHearts_10.png
+|       |       cardHearts_10.png.meta
+|       |       cardHearts_2.png
+|       |       cardHearts_2.png.meta
+|       |       cardHearts_3.png
+|       |       cardHearts_3.png.meta
+|       |       cardHearts_4.png
+|       |       cardHearts_4.png.meta
+|       |       cardHearts_5.png
+|       |       cardHearts_5.png.meta
+|       |       cardHearts_6.png
+|       |       cardHearts_6.png.meta
+|       |       cardHearts_7.png
+|       |       cardHearts_7.png.meta
+|       |       cardHearts_8.png
+|       |       cardHearts_8.png.meta
+|       |       cardHearts_9.png
+|       |       cardHearts_9.png.meta
+|       |       cardHearts_A.png
+|       |       cardHearts_A.png.meta
+|       |       cardHearts_J.png
+|       |       cardHearts_J.png.meta
+|       |       cardHearts_K.png
+|       |       cardHearts_K.png.meta
+|       |       cardHearts_Q.png
+|       |       cardHearts_Q.png.meta
+|       |       
+|       \---Spades
+|               cardSpades_10.png
+|               cardSpades_10.png.meta
+|               cardSpades_2.png
+|               cardSpades_2.png.meta
+|               cardSpades_3.png
+|               cardSpades_3.png.meta
+|               cardSpades_4.png
+|               cardSpades_4.png.meta
+|               cardSpades_5.png
+|               cardSpades_5.png.meta
+|               cardSpades_6.png
+|               cardSpades_6.png.meta
+|               cardSpades_7.png
+|               cardSpades_7.png.meta
+|               cardSpades_8.png
+|               cardSpades_8.png.meta
+|               cardSpades_9.png
+|               cardSpades_9.png.meta
+|               cardSpades_A.png
+|               cardSpades_A.png.meta
+|               cardSpades_J.png
+|               cardSpades_J.png.meta
+|               cardSpades_K.png
+|               cardSpades_K.png.meta
+|               cardSpades_Q.png
+|               cardSpades_Q.png.meta
+|               
+\---Tables
+        table_blue.png
+        table_blue.png.meta
+        table_green.png.png
+        table_green.png.png.meta
+        table_red.png
+        table_red.png.meta
+        
