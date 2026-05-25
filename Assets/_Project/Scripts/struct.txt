@@ -1,0 +1,94 @@
+Folder PATH listing
+Volume serial number is 9E33-6C19
+D:.
+|   Application.meta
+|   Bootstrap.meta
+|   Config.meta
+|   Dev.meta
+|   Domain.meta
+|   Editor.meta
+|   struct.txt
+|   UI.meta
+|   
++---Application
+|   |   Poker.meta
+|   |   
+|   \---Poker
+|           TexasHoldemOfflineRoundSimulator.cs
+|           TexasHoldemOfflineRoundSimulator.cs.meta
+|           TexasHoldemPlayerResult.cs
+|           TexasHoldemPlayerResult.cs.meta
+|           TexasHoldemRoundResult.cs
+|           TexasHoldemRoundResult.cs.meta
+|           
++---Bootstrap
+|       CardDomainSmokeTest.cs
+|       CardDomainSmokeTest.cs.meta
+|       
++---Config
+|       CardSpriteDatabase.cs
+|       CardSpriteDatabase.cs.meta
+|       CardSpriteEntry.cs
+|       CardSpriteEntry.cs.meta
+|       
++---Dev
+|       TexasHoldemOfflineGraphicDemo.cs
+|       TexasHoldemOfflineGraphicDemo.cs.meta
+|       TexasHoldemOfflineSmokeTest.cs
+|       TexasHoldemOfflineSmokeTest.cs.meta
+|       
++---Domain
+|   |   Cards.meta
+|   |   Poker.meta
+|   |   Project.Domain.asmdef
+|   |   Project.Domain.asmdef.meta
+|   |   
+|   +---Cards
+|   |       Card.cs
+|   |       Card.cs.meta
+|   |       CardCollectionValidator.cs
+|   |       CardCollectionValidator.cs.meta
+|   |       Deck.cs
+|   |       Deck.cs.meta
+|   |       DeckFactory.cs
+|   |       DeckFactory.cs.meta
+|   |       ICardShuffler.cs
+|   |       ICardShuffler.cs.meta
+|   |       Rank.cs
+|   |       Rank.cs.meta
+|   |       SecureRandomCardShuffler.cs
+|   |       SecureRandomCardShuffler.cs.meta
+|   |       Suit.cs
+|   |       Suit.cs.meta
+|   |       SystemRandomCardShuffler.cs
+|   |       SystemRandomCardShuffler.cs.meta
+|   |       
+|   \---Poker
+|           BestFiveCardPokerHandEvaluator.cs
+|           BestFiveCardPokerHandEvaluator.cs.meta
+|           BestPokerHandResult.cs
+|           BestPokerHandResult.cs.meta
+|           PokerHandComparer.cs
+|           PokerHandComparer.cs.meta
+|           PokerHandEvaluator.cs
+|           PokerHandEvaluator.cs.meta
+|           PokerHandRank.cs
+|           PokerHandRank.cs.meta
+|           PokerHandResult.cs
+|           PokerHandResult.cs.meta
+|           
++---Editor
+|       CardSpriteDatabaseAutoBuilder.cs
+|       CardSpriteDatabaseAutoBuilder.cs.meta
+|       
+\---UI
+    |   Components.meta
+    |   Views.meta
+    |   
+    +---Components
+    \---Views
+            CardAnimationRunner.cs
+            CardAnimationRunner.cs.meta
+            CardView.cs
+            CardView.cs.meta
+            

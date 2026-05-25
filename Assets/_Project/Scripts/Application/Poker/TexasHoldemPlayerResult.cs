@@ -24,7 +24,7 @@ namespace Project.Application.Poker
 
             PlayerId = playerId;
             HoleCards = holeCards?.ToArray() ?? throw new ArgumentNullException(nameof(holeCards));
-            BestHand = bestHand ?? throw new ArgumentNullException(nameof(bestHand));
+            BestHand = bestHand;
             IsWinner = isWinner;
         }
     }
