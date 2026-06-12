@@ -47,8 +47,12 @@ namespace Project.Dev
         [SerializeField] private TMP_Text botActionText;
         [SerializeField] private TMP_Text playerTimerText;
         [SerializeField] private TMP_Text botTimerText;
+        [SerializeField] private GameObject playerTimerBackground;
+        [SerializeField] private GameObject botTimerBackground;
         [SerializeField] private TMP_Text playerHandRankText;
         [SerializeField] private TMP_Text botHandRankText;
+        [SerializeField] private GameObject playerHandRankBackground;
+        [SerializeField] private GameObject botHandRankBackground;
 
         [Header("Pot And Bets")]
         [SerializeField] private TMP_Text livePotText;
@@ -72,7 +76,9 @@ namespace Project.Dev
         [SerializeField] private TMP_Text rightActionButtonText;
 
         [Header("Bet Slider")]
+        [SerializeField] private GameObject betSliderContainer;
         [SerializeField] private Slider betAmountSlider;
+        [SerializeField] private GameObject selectedBetAmountContainer;
         [SerializeField] private TMP_Text selectedBetAmountText;
         [SerializeField] private Button decreaseBetButton;
         [SerializeField] private Button increaseBetButton;
@@ -95,7 +101,6 @@ namespace Project.Dev
 
         [Header("Audio")]
         [SerializeField] private AudioSource audioSource;
-        [SerializeField] private AudioSource timerAudioSource;
         [FormerlySerializedAs("dealCardClip")]
         [SerializeField] private AudioClip drawCardClip;
         [SerializeField] private AudioClip drawCardClip2;
@@ -109,10 +114,16 @@ namespace Project.Dev
         [SerializeField] private AudioClip chipsEarnedClip;
         [SerializeField] private AudioClip placeChipsClip;
         [SerializeField] private AudioClip collectChipsClip;
-        [SerializeField] private AudioClip timerCountdownClip;
         [SerializeField] private AudioClip foldCardsClip;
         [SerializeField] private AudioClip winnerClip;
-        [SerializeField] private float countdownSoundStartSeconds = 5f;
+
+        [Header("Hand Rank Colors")]
+        [SerializeField] private Color highCardRankColor = Color.white;
+        [SerializeField] private Color pairRankColor = new Color(1f, 0.84f, 0f);
+        [SerializeField] private Color threeKindRankColor = new Color(0.55f, 0.85f, 1f);
+        [SerializeField] private Color straightPlusRankColor = new Color(0.25f, 0.95f, 0.35f);
+        [SerializeField] private Color fourKindRankColor = new Color(0.72f, 0.35f, 1f);
+        [SerializeField] private Color straightFlushRankColor = new Color(1f, 0.16f, 0.16f);
 
         [Header("Game Rules")]
         [SerializeField] private int startingChips = 100000;
@@ -127,13 +138,14 @@ namespace Project.Dev
         [Header("Animation")]
         [SerializeField] private float dealDelay = 0.12f;
         [SerializeField] private float moveDuration = 0.22f;
+        [SerializeField] private float cardFlipDuration = 0.24f;
 
         [Header("Debug")]
         [SerializeField] private bool useFixedSeed = false;
         [SerializeField] private int seed = 12345;
-        [SerializeField] private bool showOpponentCards = true;
 
         private readonly List<CardView> _spawnedCards = new();
+        private readonly List<CardView> _playerHoleCardViews = new();
         private readonly Dictionary<Card, CardView> _cardViewsByCard = new();
         private readonly Dictionary<string, string> _lastActionByPlayerId = new();
 
@@ -146,6 +158,7 @@ namespace Project.Dev
         private Coroutine _autoNewHandCoroutine;
         private bool _controlsInitialized;
         private bool _inputLocked;
+        private bool _isBotThinking;
         private string _activeTimerPlayerId;
         private TexasHoldemStreet _activeTimerStreet = TexasHoldemStreet.NotStarted;
         private float _turnTimeRemaining;
@@ -159,8 +172,8 @@ namespace Project.Dev
         private int _visualSettledPot;
         private int _displayedPlayerStack;
         private int _displayedBotStack;
-        private bool _botCardsRevealedForShowdown;
-        private int _lastCountdownSecondPlayed = -1;
+        private bool _playerHoleCardsFaceUp = true;
+        private bool _playerHoleCardsFlipInProgress;
 
         private void Awake()
         {
@@ -227,8 +240,8 @@ namespace Project.Dev
             ResetVisualPotStateFromRound();
             ResetDisplayedStacksFromRound();
 
-            _lastActionByPlayerId[HumanPlayerId] = _dealerIndex == 0 ? $"SB {smallBlind}" : $"BB {bigBlind}";
-            _lastActionByPlayerId[BotPlayerId] = _dealerIndex == 1 ? $"SB {smallBlind}" : $"BB {bigBlind}";
+            _lastActionByPlayerId[HumanPlayerId] = FormatPostedBlindLabel(HumanPlayerId);
+            _lastActionByPlayerId[BotPlayerId] = FormatPostedBlindLabel(BotPlayerId);
 
             TexasHoldemRoundPlayerState player = _round.Players[0];
             TexasHoldemRoundPlayerState bot = _round.Players[1];
@@ -239,13 +252,13 @@ namespace Project.Dev
             yield return DealCard(player.HoleCards[0], playerSlots[0], true);
             yield return WaitDealDelay();
 
-            yield return DealCard(bot.HoleCards[0], botSlots[0], showOpponentCards);
+            yield return DealCard(bot.HoleCards[0], botSlots[0], false);
             yield return WaitDealDelay();
 
             yield return DealCard(player.HoleCards[1], playerSlots[1], true);
             yield return WaitDealDelay();
 
-            yield return DealCard(bot.HoleCards[1], botSlots[1], showOpponentCards);
+            yield return DealCard(bot.HoleCards[1], botSlots[1], false);
             yield return WaitDealDelay();
 
             _inputLocked = false;
@@ -366,8 +379,61 @@ namespace Project.Dev
 
             _spawnedCards.Add(cardView);
             _cardViewsByCard[card] = cardView;
+            RegisterPlayerHoleCardToggle(cardView);
 
             yield return _animationRunner.MoveToSlot(cardView, targetSlot, moveDuration);
+        }
+
+        private void RegisterPlayerHoleCardToggle(CardView cardView)
+        {
+            if (_round == null || _round.Players.Count == 0)
+                return;
+
+            TexasHoldemRoundPlayerState player = _round.Players[0];
+
+            if (!player.HoleCards.Contains(cardView.Card))
+                return;
+
+            _playerHoleCardViews.Add(cardView);
+
+            CardClickHandler clickHandler = cardView.GetComponent<CardClickHandler>();
+
+            if (clickHandler == null)
+                clickHandler = cardView.gameObject.AddComponent<CardClickHandler>();
+
+            clickHandler.Initialize(OnPlayerHoleCardClicked);
+        }
+
+        private void OnPlayerHoleCardClicked(CardView cardView)
+        {
+            if (_playerHoleCardsFlipInProgress || _playerHoleCardViews.Count < 2)
+                return;
+
+            TexasHoldemRoundPlayerState player = _round != null && _round.Players.Count > 0
+                ? _round.Players[0]
+                : null;
+
+            if (player != null && player.HasFolded && !_round.IsHandComplete)
+                return;
+
+            StartCoroutine(TogglePlayerHoleCardsFaceUp());
+        }
+
+        private IEnumerator TogglePlayerHoleCardsFaceUp()
+        {
+            _playerHoleCardsFlipInProgress = true;
+            _playerHoleCardsFaceUp = !_playerHoleCardsFaceUp;
+            PlayRandomDrawCardSound();
+
+            yield return _animationRunner.FlipFaces(
+                _playerHoleCardViews,
+                _playerHoleCardsFaceUp,
+                cardFlipDuration
+            );
+
+            _playerHoleCardsFlipInProgress = false;
+            RefreshFoldedCardDimStates();
+            RefreshCurrentHighlights();
         }
 
         private void ApplyHumanAction(TexasHoldemPlayerAction action)
@@ -396,6 +462,12 @@ namespace Project.Dev
             SetVisualStreetBet(playerId, streetBetsBeforeAction[playerId] + committedAmount);
             PlayActionSound(action);
 
+            if (action.ActionType == TexasHoldemPlayerActionType.Fold)
+            {
+                RefreshFoldedCardDimStates();
+                yield return SetHoleCardsFaceUp(actingPlayer, false, playDrawSound: false);
+            }
+
             if (committedAmount > 0)
                 SetDisplayedStack(playerId, GetDisplayedStack(playerId) - committedAmount);
 
@@ -422,8 +494,11 @@ namespace Project.Dev
             while (_round != null && !_round.IsHandComplete && _round.CurrentPlayer != null && _round.CurrentPlayer.IsBot)
             {
                 _inputLocked = true;
+                _isBotThinking = true;
                 RefreshHud();
                 yield return WaitBotThinkDelay();
+                _isBotThinking = false;
+                StopTurnTimer();
 
                 string botPlayerId = _round.CurrentPlayer.PlayerId;
                 TexasHoldemPlayerAction botAction = _bot.ChooseAction(_round);
@@ -433,6 +508,7 @@ namespace Project.Dev
             }
 
             _inputLocked = false;
+            _isBotThinking = false;
             RefreshHud();
         }
 
@@ -450,8 +526,7 @@ namespace Project.Dev
             if (_round != null && _round.IsHandComplete)
             {
                 _inputLocked = true;
-                RevealOpponentCards();
-                _botCardsRevealedForShowdown = true;
+                yield return RevealCardsForHandComplete();
                 RefreshHud();
                 ShowResult(_round.RoundResult);
                 HighlightWinnerCards(_round.RoundResult);
@@ -609,6 +684,7 @@ namespace Project.Dev
 
                 RectTransform winnerBetAnchor = GetBetAnchor(winner.PlayerId);
 
+                PlaySound(placeChipsClip);
                 yield return AnimateChips(GetSettledPotAnchor(), winnerBetAnchor, awardAmount);
                 _visualSettledPot -= awardAmount;
                 SetVisualStreetBet(winner.PlayerId, GetVisualStreetBet(winner.PlayerId) + awardAmount);
@@ -669,11 +745,11 @@ namespace Project.Dev
 
         private void RefreshHud()
         {
+            UpdateTurnOwner();
             UpdateTableText();
             UpdatePlayerHud();
             UpdateActionControls();
             RefreshHandPreviewHighlights();
-            UpdateTurnOwner();
         }
 
         private void UpdateTableText()
@@ -722,8 +798,13 @@ namespace Project.Dev
             SetText(playerActionText, GetActionText(HumanPlayerId));
             SetText(botActionText, GetActionText(BotPlayerId));
 
-            SetText(playerHandRankText, GetPreviewText(player, revealCards: true));
-            SetText(botHandRankText, GetPreviewText(bot, revealCards: showOpponentCards || _botCardsRevealedForShowdown));
+            UpdateHandRankDisplay(playerHandRankText, playerHandRankBackground, player, revealCards: true);
+            UpdateHandRankDisplay(
+                botHandRankText,
+                botHandRankBackground,
+                bot,
+                revealCards: ShouldShowHandRank(bot)
+            );
         }
 
         private void UpdateActionControls()
@@ -791,7 +872,9 @@ namespace Project.Dev
             minAmount = Mathf.Max(0, minAmount);
             maxAmount = Mathf.Max(minAmount, maxAmount);
 
+            SetGameObjectActive(betSliderContainer, true);
             betAmountSlider.gameObject.SetActive(true);
+            SetGameObjectActive(selectedBetAmountContainer, true);
             SetObjectActive(selectedBetAmountText, true);
             SetObjectActive(decreaseBetButton, true);
             SetObjectActive(increaseBetButton, true);
@@ -809,9 +892,12 @@ namespace Project.Dev
 
         private void SetBetSliderVisible(bool visible)
         {
+            SetGameObjectActive(betSliderContainer, visible);
+
             if (betAmountSlider != null)
                 betAmountSlider.gameObject.SetActive(visible);
 
+            SetGameObjectActive(selectedBetAmountContainer, visible);
             SetObjectActive(selectedBetAmountText, visible);
             SetObjectActive(decreaseBetButton, visible);
             SetObjectActive(increaseBetButton, visible);
@@ -904,17 +990,47 @@ namespace Project.Dev
             foreach (Card card in preview.HighlightCards)
             {
                 if (_cardViewsByCard.TryGetValue(card, out CardView cardView))
+                {
+                    if (!ShouldHighlightShownCard(cardView))
+                        continue;
+
                     cardView.SetHighlighted(true);
+                }
             }
         }
 
-        private string GetPreviewText(TexasHoldemRoundPlayerState player, bool revealCards)
+        private void RefreshCurrentHighlights()
+        {
+            if (_round != null && _round.IsHandComplete && _round.RoundResult != null)
+            {
+                HighlightWinnerCards(_round.RoundResult);
+                return;
+            }
+
+            RefreshHandPreviewHighlights();
+        }
+
+        private void UpdateHandRankDisplay(
+            TMP_Text rankText,
+            GameObject rankBackground,
+            TexasHoldemRoundPlayerState player,
+            bool revealCards)
         {
             if (!revealCards)
-                return string.Empty;
+            {
+                SetText(rankText, string.Empty);
+                SetObjectActive(rankText, false);
+                SetGameObjectActive(rankBackground, false);
+                return;
+            }
 
             TexasHoldemHandPreview preview = EvaluatePreview(player);
-            return FormatRank(preview.Rank);
+            SetObjectActive(rankText, true);
+            SetGameObjectActive(rankBackground, true);
+            SetText(rankText, FormatRank(preview.Rank));
+
+            if (rankText != null)
+                rankText.color = GetRankColor(preview.Rank);
         }
 
         private TexasHoldemHandPreview EvaluatePreview(TexasHoldemRoundPlayerState player)
@@ -1010,26 +1126,142 @@ namespace Project.Dev
                 .SelectMany(player => player.BestHand.BestCards)
                 .ToHashSet();
 
-            foreach (CardView cardView in _spawnedCards)
+            if (winningCards.Count > 0)
             {
-                cardView.SetHighlighted(winningCards.Contains(cardView.Card));
+                foreach (CardView cardView in _spawnedCards)
+                {
+                    cardView.SetHighlighted(winningCards.Contains(cardView.Card) && ShouldHighlightShownCard(cardView));
+                }
+
+                return;
             }
+
+            HighlightShownMadeRankCards();
         }
 
-        private void RevealOpponentCards()
+        private void HighlightShownMadeRankCards()
         {
             if (_round == null)
                 return;
 
-            TexasHoldemRoundPlayerState bot = _round.Players.FirstOrDefault(player => player.IsBot);
+            foreach (TexasHoldemRoundPlayerState player in _round.Players)
+            {
+                TexasHoldemHandPreview preview = EvaluatePreview(player);
 
-            if (bot == null)
+                if (preview.Rank == PokerHandRank.HighCard)
+                    continue;
+
+                foreach (Card card in preview.HighlightCards)
+                {
+                    if (_cardViewsByCard.TryGetValue(card, out CardView cardView) && ShouldHighlightShownCard(cardView))
+                        cardView.SetHighlighted(true);
+                }
+            }
+        }
+
+        private IEnumerator RevealCardsForHandComplete()
+        {
+            if (_round == null || _round.RoundResult == null)
+                yield break;
+
+            foreach (TexasHoldemRoundPlayerState player in _round.Players)
+            {
+                if (!ShouldRevealHoleCardsAtCompletion(player))
+                    continue;
+
+                yield return SetHoleCardsFaceUp(player, true, playDrawSound: true);
+            }
+
+            RefreshFoldedCardDimStates();
+        }
+
+        private bool ShouldRevealHoleCardsAtCompletion(TexasHoldemRoundPlayerState player)
+        {
+            TexasHoldemPlayerResult result = _round.RoundResult.Players.FirstOrDefault(candidate => candidate.PlayerId == player.PlayerId);
+
+            if (result != null && result.BestHand != null)
+                return true;
+
+            return player.IsBot && player.HasFolded && HasMadeRank(player);
+        }
+
+        private bool HasMadeRank(TexasHoldemRoundPlayerState player)
+        {
+            return EvaluatePreview(player).Rank != PokerHandRank.HighCard;
+        }
+
+        private IEnumerator SetHoleCardsFaceUp(
+            TexasHoldemRoundPlayerState player,
+            bool faceUp,
+            bool playDrawSound)
+        {
+            CardView[] holeCardViews = GetHoleCardViews(player)
+                .Where(cardView => cardView != null && cardView.IsFaceUp != faceUp)
+                .ToArray();
+
+            if (holeCardViews.Length == 0)
+            {
+                UpdateHumanHoleCardFaceState(player, faceUp);
+                yield break;
+            }
+
+            if (playDrawSound)
+                PlayRandomDrawCardSound();
+
+            yield return _animationRunner.FlipFaces(
+                holeCardViews,
+                faceUp,
+                cardFlipDuration
+            );
+
+            UpdateHumanHoleCardFaceState(player, faceUp);
+            RefreshCurrentHighlights();
+        }
+
+        private void UpdateHumanHoleCardFaceState(TexasHoldemRoundPlayerState player, bool faceUp)
+        {
+            if (player.PlayerId == HumanPlayerId)
+                _playerHoleCardsFaceUp = faceUp;
+        }
+
+        private CardView[] GetHoleCardViews(TexasHoldemRoundPlayerState player)
+        {
+            return player.HoleCards
+                .Select(card => _cardViewsByCard.TryGetValue(card, out CardView cardView) ? cardView : null)
+                .Where(cardView => cardView != null)
+                .ToArray();
+        }
+
+        private bool ShouldHighlightShownCard(CardView cardView)
+        {
+            return cardView != null && cardView.IsFaceUp;
+        }
+
+        private bool ShouldShowHandRank(TexasHoldemRoundPlayerState player)
+        {
+            if (player.PlayerId == HumanPlayerId)
+                return true;
+
+            CardView[] holeCardViews = GetHoleCardViews(player);
+            return holeCardViews.Length == player.HoleCards.Count && holeCardViews.All(cardView => cardView.IsFaceUp);
+        }
+
+        private void RefreshFoldedCardDimStates()
+        {
+            if (_round == null)
                 return;
 
-            foreach (Card card in bot.HoleCards)
+            foreach (TexasHoldemRoundPlayerState player in _round.Players)
             {
-                if (_cardViewsByCard.TryGetValue(card, out CardView cardView))
-                    cardView.SetFaceUp(true);
+                bool folded = player.HasFolded;
+
+                foreach (CardView cardView in GetHoleCardViews(player))
+                {
+                    cardView.SetDimmed(folded);
+
+                    if (folded && !cardView.IsFaceUp)
+                        cardView.SetHighlighted(false);
+                }
             }
         }
 
@@ -1047,7 +1279,7 @@ namespace Project.Dev
 
         private void UpdateTurnOwner()
         {
-            string currentPlayerId = _round != null && _round.CurrentPlayer != null && !_round.IsHandComplete && !_inputLocked
+            string currentPlayerId = ShouldShowTurnTimer()
                 ? _round.CurrentPlayer.PlayerId
                 : null;
             TexasHoldemStreet currentStreet = _round != null ? _round.Street : TexasHoldemStreet.NotStarted;
@@ -1058,7 +1290,6 @@ namespace Project.Dev
             _activeTimerPlayerId = currentPlayerId;
             _activeTimerStreet = currentStreet;
             _turnTimeRemaining = turnTimeLimitSeconds;
-            _lastCountdownSecondPlayed = -1;
             UpdateTimerTexts();
         }
 
@@ -1072,7 +1303,6 @@ namespace Project.Dev
 
             _turnTimeRemaining = Mathf.Max(0f, _turnTimeRemaining - Time.deltaTime);
             UpdateTimerTexts();
-            PlayCountdownSoundIfNeeded();
 
             if (_turnTimeRemaining > 0f || _inputLocked || _round.CurrentPlayer.PlayerId != HumanPlayerId)
                 return;
@@ -1095,27 +1325,34 @@ namespace Project.Dev
         private void SetTimerVisible(string playerId, bool visible)
         {
             TMP_Text timerText = playerId == HumanPlayerId ? playerTimerText : botTimerText;
+            GameObject timerBackground = playerId == HumanPlayerId ? playerTimerBackground : botTimerBackground;
+
             SetObjectActive(timerText, visible);
+            SetGameObjectActive(timerBackground, visible);
         }
 
         private bool IsTurnTimerRunning()
         {
-            return _round != null
-                && !_round.IsHandComplete
-                && !_inputLocked
-                && _round.CurrentPlayer != null
+            return ShouldShowTurnTimer()
                 && !string.IsNullOrEmpty(_activeTimerPlayerId)
                 && _round.CurrentPlayer.PlayerId == _activeTimerPlayerId;
+        }
+
+        private bool ShouldShowTurnTimer()
+        {
+            if (_round == null || _round.IsHandComplete || _round.CurrentPlayer == null)
+                return false;
+
+            if (_round.CurrentPlayer.PlayerId == HumanPlayerId)
+                return !_inputLocked;
+
+            return _round.CurrentPlayer.IsBot && _isBotThinking;
         }
 
         private void StopTurnTimer()
         {
             _activeTimerPlayerId = null;
             _activeTimerStreet = TexasHoldemStreet.NotStarted;
-            _lastCountdownSecondPlayed = -1;
-
-            if (timerAudioSource != null && timerAudioSource != audioSource)
-                timerAudioSource.Stop();
 
             SetTimerVisible(HumanPlayerId, false);
             SetTimerVisible(BotPlayerId, false);
@@ -1159,8 +1396,41 @@ namespace Project.Dev
 
         private string GetActionText(string playerId)
         {
+            if (ShouldShowSeatPositionForTurn(playerId))
+                return GetSeatPositionLabel(playerId);
+
             return _lastActionByPlayerId.TryGetValue(playerId, out string actionText)
                 ? actionText
+                : string.Empty;
+        }
+
+        private bool ShouldShowSeatPositionForTurn(string playerId)
+        {
+            return _round != null
+                && !_round.IsHandComplete
+                && _round.CurrentPlayer != null
+                && _round.CurrentPlayer.PlayerId == playerId
+                && _activeTimerPlayerId == playerId;
+        }
+
+        private string FormatPostedBlindLabel(string playerId)
+        {
+            TexasHoldemRoundPlayerState player = GetPlayer(playerId);
+            string seatPosition = GetSeatPositionLabel(playerId);
+
+            if (player.SeatIndex == _round.SmallBlindIndex)
+                return $"{seatPosition} {FormatChips(smallBlind)}";
+
+            if (player.SeatIndex == _round.BigBlindIndex)
+                return $"{seatPosition} {FormatChips(bigBlind)}";
+
+            return seatPosition;
+        }
+
+        private string GetSeatPositionLabel(string playerId)
+        {
+            return _round != null
+                ? _round.GetSeatPositionText(playerId)
                 : string.Empty;
         }
 
@@ -1191,45 +1461,12 @@ namespace Project.Dev
             }
         }
 
-        private void PlayCountdownSoundIfNeeded()
-        {
-            if (_activeTimerPlayerId != HumanPlayerId)
-                return;
-
-            int secondsLeft = Mathf.CeilToInt(_turnTimeRemaining);
-
-            if (secondsLeft <= 0 || secondsLeft > Mathf.CeilToInt(countdownSoundStartSeconds))
-                return;
-
-            if (secondsLeft == _lastCountdownSecondPlayed)
-                return;
-
-            _lastCountdownSecondPlayed = secondsLeft;
-            PlayTimerSound(timerCountdownClip);
-        }
-
         private void PlaySound(AudioClip clip)
         {
             if (clip == null || audioSource == null)
                 return;
 
             audioSource.PlayOneShot(clip);
-        }
-
-        private void PlayTimerSound(AudioClip clip)
-        {
-            if (clip == null)
-                return;
-
-            AudioSource source = timerAudioSource != null ? timerAudioSource : audioSource;
-
-            if (source == null)
-                return;
-
-            if (timerAudioSource != null && timerAudioSource != audioSource)
-                source.Stop();
-
-            source.PlayOneShot(clip);
         }
 
         private void PlayRandomDrawCardSound()
@@ -1294,6 +1531,29 @@ namespace Project.Dev
                     return "Pair";
                 default:
                     return "High Card";
+            }
+        }
+
+        private Color GetRankColor(PokerHandRank rank)
+        {
+            switch (rank)
+            {
+                case PokerHandRank.OnePair:
+                case PokerHandRank.TwoPair:
+                    return pairRankColor;
+                case PokerHandRank.ThreeOfAKind:
+                    return threeKindRankColor;
+                case PokerHandRank.Straight:
+                case PokerHandRank.Flush:
+                case PokerHandRank.FullHouse:
+                    return straightPlusRankColor;
+                case PokerHandRank.FourOfAKind:
+                    return fourKindRankColor;
+                case PokerHandRank.StraightFlush:
+                case PokerHandRank.RoyalFlush:
+                    return straightFlushRankColor;
+                default:
+                    return highCardRankColor;
             }
         }
 
@@ -1392,19 +1652,27 @@ namespace Project.Dev
             }
 
             _spawnedCards.Clear();
+            _playerHoleCardViews.Clear();
             _cardViewsByCard.Clear();
             _dealtBoardCardCount = 0;
             _selectedBetOrRaiseTo = 0;
+            _playerHoleCardsFaceUp = true;
+            _playerHoleCardsFlipInProgress = false;
+            _isBotThinking = false;
             _activeTimerPlayerId = null;
             _activeTimerStreet = TexasHoldemStreet.NotStarted;
             _visualPlayerStreetBet = 0;
             _visualBotStreetBet = 0;
             _visualSettledPot = 0;
-            _botCardsRevealedForShowdown = false;
-            _lastCountdownSecondPlayed = -1;
             SetStatus(string.Empty);
             SetText(playerHandRankText, string.Empty);
             SetText(botHandRankText, string.Empty);
+            SetObjectActive(playerHandRankText, false);
+            SetObjectActive(botHandRankText, false);
+            SetGameObjectActive(playerHandRankBackground, false);
+            SetGameObjectActive(botHandRankBackground, false);
+            SetTimerVisible(HumanPlayerId, false);
+            SetTimerVisible(BotPlayerId, false);
             SetText(playerActionText, string.Empty);
             SetText(botActionText, string.Empty);
             SetGameObjectActive(playerWinnerVisual, false);

@@ -213,6 +213,42 @@ namespace Project.Application.Poker
             return MinimumBetAmount;
         }
 
+        public IReadOnlyList<TexasHoldemSeatPosition> GetSeatPositions(string playerId)
+        {
+            TexasHoldemRoundPlayerState player = FindPlayer(playerId);
+            return GetSeatPositions(player.SeatIndex).ToArray();
+        }
+
+        public string GetSeatPositionText(string playerId)
+        {
+            return string.Join("/", GetSeatPositions(playerId).Select(FormatSeatPosition));
+        }
+
+        public static string FormatSeatPosition(TexasHoldemSeatPosition position)
+        {
+            switch (position)
+            {
+                case TexasHoldemSeatPosition.Button:
+                    return "BTN";
+                case TexasHoldemSeatPosition.SmallBlind:
+                    return "SB";
+                case TexasHoldemSeatPosition.BigBlind:
+                    return "BB";
+                case TexasHoldemSeatPosition.UnderTheGun:
+                    return "UTG";
+                case TexasHoldemSeatPosition.Lojack:
+                    return "LJ";
+                case TexasHoldemSeatPosition.Hijack:
+                    return "HJ";
+                case TexasHoldemSeatPosition.Cutoff:
+                    return "CO";
+                case TexasHoldemSeatPosition.MiddlePosition:
+                    return "MP";
+                default:
+                    return position.ToString();
+            }
+        }
+
         private void ResetHand()
         {
             _players.Clear();
@@ -384,6 +420,13 @@ namespace Project.Application.Poker
 
             if (IsBettingRoundComplete())
             {
+                if (RemainingPlayersHaveNoFutureBetting())
+                {
+                    RunOutBoard();
+                    CompleteByShowdown();
+                    return;
+                }
+
                 AdvanceStreetOrShowdown();
                 return;
             }
@@ -415,6 +458,18 @@ namespace Project.Application.Poker
                 .ToArray();
 
             return activePlayers.Length > 1 && activePlayers.All(player => player.IsAllIn);
+        }
+
+        private bool RemainingPlayersHaveNoFutureBetting()
+        {
+            TexasHoldemRoundPlayerState[] activePlayers = _players
+                .Where(player => !player.HasFolded)
+                .ToArray();
+
+            if (activePlayers.Length <= 1)
+                return false;
+
+            return activePlayers.Count(player => !player.IsAllIn) <= 1;
         }
 
         private bool IsBettingRoundComplete()
@@ -593,6 +648,64 @@ namespace Project.Application.Poker
         private int NextSeat(int seatIndex)
         {
             return (seatIndex + 1) % _players.Count;
+        }
+
+        private IEnumerable<TexasHoldemSeatPosition> GetSeatPositions(int seatIndex)
+        {
+            if (_players.Count == 2)
+            {
+                if (seatIndex == _dealerIndex)
+                {
+                    yield return TexasHoldemSeatPosition.Button;
+                    yield return TexasHoldemSeatPosition.SmallBlind;
+                }
+                else
+                {
+                    yield return TexasHoldemSeatPosition.BigBlind;
+                }
+
+                yield break;
+            }
+
+            if (seatIndex == _dealerIndex)
+            {
+                yield return TexasHoldemSeatPosition.Button;
+                yield break;
+            }
+
+            if (seatIndex == _smallBlindIndex)
+            {
+                yield return TexasHoldemSeatPosition.SmallBlind;
+                yield break;
+            }
+
+            if (seatIndex == _bigBlindIndex)
+            {
+                yield return TexasHoldemSeatPosition.BigBlind;
+                yield break;
+            }
+
+            yield return GetNonBlindSeatPosition(seatIndex);
+        }
+
+        private TexasHoldemSeatPosition GetNonBlindSeatPosition(int seatIndex)
+        {
+            int seatsAfterBigBlind = (_players.Count + seatIndex - _bigBlindIndex) % _players.Count;
+            int seatsBeforeButton = (_players.Count + _dealerIndex - seatIndex) % _players.Count;
+
+            if (seatsAfterBigBlind == 1)
+                return TexasHoldemSeatPosition.UnderTheGun;
+
+            if (seatsBeforeButton == 1)
+                return TexasHoldemSeatPosition.Cutoff;
+
+            if (seatsBeforeButton == 2)
+                return TexasHoldemSeatPosition.Hijack;
+
+            if (seatsBeforeButton == 3)
+                return TexasHoldemSeatPosition.Lojack;
+
+            return TexasHoldemSeatPosition.MiddlePosition;
         }
 
         private int NextActiveSeat(int currentSeatIndex)

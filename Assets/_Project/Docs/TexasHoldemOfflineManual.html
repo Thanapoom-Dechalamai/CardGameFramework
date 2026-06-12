@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Texas Hold'em Offline - Unity Documentation</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --panel: #ffffff;
+      --text: #1d1d1f;
+      --muted: #5f6368;
+      --line: #d8dbe1;
+      --code-bg: #1f2329;
+      --code-text: #e8edf2;
+      --accent: #1677ff;
+      --accent-soft: #eaf3ff;
+      --ok: #0a7f42;
+      --warn: #a05a00;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Thai", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 32px 40px;
+      background: #111827;
+      color: white;
+      border-bottom: 1px solid #0b1220;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    header p {
+      margin: 0;
+      color: #cbd5e1;
+      max-width: 960px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 24px;
+      width: 100%;
+      max-width: 1440px;
+      min-width: 0;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    nav {
+      position: sticky;
+      top: 16px;
+      align-self: start;
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    nav h2 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    nav a {
+      display: block;
+      padding: 6px 0;
+      color: #1a5fb4;
+      text-decoration: none;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    main {
+      display: grid;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    section {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 25px;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    h4 {
+      margin: 18px 0 8px;
+      font-size: 15px;
+      color: #333943;
+    }
+
+    p { margin: 0 0 12px; }
+
+    ul, ol {
+      margin: 8px 0 16px 22px;
+      padding: 0;
+    }
+
+    li { margin: 5px 0; }
+
+    table {
+      width: 100%;
+      max-width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      margin: 12px 0 18px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      vertical-align: top;
+      text-align: left;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    th {
+      background: #f0f2f5;
+      font-weight: 650;
+    }
+
+    code {
+      font-family: "Cascadia Code", Consolas, Menlo, monospace;
+      font-size: .94em;
+      background: #eef1f5;
+      padding: 1px 5px;
+      border-radius: 4px;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    pre {
+      margin: 12px 0 18px;
+      padding: 16px;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border-radius: 8px;
+      background: var(--code-bg);
+      color: var(--code-text);
+      border: 1px solid #111827;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+      font-size: 13px;
+      white-space: pre;
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #0757b8;
+      font-size: 12px;
+      font-weight: 650;
+      margin-right: 6px;
+    }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      padding: 12px 14px;
+      border-radius: 6px;
+      margin: 14px 0;
+    }
+
+    .success { border-left-color: var(--ok); background: #ecfdf3; }
+    .warning { border-left-color: var(--warn); background: #fff7ed; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .mini {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfe;
+    }
+
+    .mini h4 { margin-top: 0; }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+      nav { position: static; }
+      .grid { grid-template-columns: 1fr; }
+      header { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Texas Hold'em Offline - Unity Documentation</h1>
+    <p>เอกสารเทคนิคหน้าเดียวสำหรับระบบ Texas Hold'em Offline vs Bot ครอบคลุม architecture, scene setup, runtime flow, API reference, object structure และตัวอย่างโค้ดใช้งานจริง</p>
+  </header>
+
+  <div class="layout">
+    <nav>
+      <h2>Contents</h2>
+      <a href="#overview">Overview</a>
+      <a href="#feature-status">Feature Status</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#file-class-reference">File & Class Reference</a>
+      <a href="#scene-setup">Unity Scene Setup</a>
+      <a href="#demo-controller">Demo Controller Fields</a>
+      <a href="#game-flow">Runtime Flow</a>
+      <a href="#api-round">Round State Machine API</a>
+      <a href="#api-actions">Player Action API</a>
+      <a href="#api-bot">Bot API</a>
+      <a href="#api-hand-evaluator">Poker Hand Evaluator API</a>
+      <a href="#ui-api">UI Components API</a>
+      <a href="#code-examples">Code Examples</a>
+      <a href="#reuse">Reusable Parts</a>
+    </nav>
+
+    <main>
+      <section id="overview">
+        <h2>Overview</h2>
+        <p><span class="badge">Playable Prototype</span><span class="badge">Offline</span><span class="badge">Heads-up</span><span class="badge">vs Bot</span></p>
+        <p>Texas Hold'em Offline เป็นระบบ heads-up poker ระหว่าง player และ bot ที่แยก game logic ออกจาก Unity presentation layer. แกนเกมอยู่ใน <code>TexasHoldemRoundStateMachine</code> ส่วน <code>TexasHoldemOfflineGraphicDemo</code> เป็น controller สำหรับ scene demo ที่ผูก UI, animation, audio และ visual feedback เข้ากับ state machine.</p>
+
+        <div class="callout success">
+          <strong>Current Scope:</strong> ระบบรองรับ playable loop ครบตั้งแต่เริ่ม hand, blinds/ante, betting rounds, bot action, all-in runout, showdown, winner result, chip animation, hand-rank preview และ auto next hand.
+        </div>
+
+        <h3>Core Capabilities</h3>
+        <ul>
+          <li>Round state machine สำหรับ PreFlop, Flop, Turn, River, Showdown และ HandComplete</li>
+          <li>Player actions: Fold, Check, Call, Bet, RaiseTo, AllIn</li>
+          <li>Live pot และ settled pot แยกกัน เพื่อรองรับ visual chip flow</li>
+          <li>Bot decision ใช้ equity simulation, pot odds, aggression, looseness และ bluff rate</li>
+          <li>Hand evaluator แยกเป็น domain layer ใช้ซ้ำกับ poker mode อื่นได้</li>
+          <li>Unity UI ใช้ serialized references จาก Inspector ไม่สร้าง UI control เองตอน runtime</li>
+        </ul>
+      </section>
+
+      <section id="feature-status">
+        <h2>Feature Status</h2>
+        <table>
+          <tr><th>Feature</th><th>Status</th><th>Notes</th></tr>
+          <tr><td>Heads-up Texas Hold'em</td><td>Done</td><td>Human player vs bot</td></tr>
+          <tr><td>RoundStateMachine</td><td>Done</td><td>จัดการ street, turn, action validation, pot, result</td></tr>
+          <tr><td>Blinds / Ante</td><td>Done</td><td>Ante เปิด/ปิดได้</td></tr>
+          <tr><td>3-button action UI</td><td>Done</td><td>Fold, Check/Call, Bet/Raise/All In</td></tr>
+          <tr><td>Bet/Raise slider</td><td>Done</td><td>มี container สำหรับซ่อนทั้งกลุ่ม control</td></tr>
+          <tr><td>Bot AI</td><td>Done</td><td>Equity simulation, pot odds, bluff, all-in</td></tr>
+          <tr><td>Turn timer visual</td><td>Done</td><td>Text + background สำหรับ player และ bot</td></tr>
+          <tr><td>Timer sound</td><td>Deferred</td><td>ถอดออกชั่วคราวเพื่อรอระบบ sync เสียงต่อวินาที</td></tr>
+          <tr><td>Hand rank preview</td><td>Done</td><td>Player แสดงตลอด, bot แสดงเมื่อ reveal</td></tr>
+          <tr><td>Rank color config</td><td>Done</td><td>Config ได้ผ่าน Inspector color fields</td></tr>
+          <tr><td>Highlight preview</td><td>Done</td><td>ซ่อน highlight บน hole cards เมื่อ hide ไพ่ player</td></tr>
+          <tr><td>Best-five highlight</td><td>Done</td><td>ใช้หลัง showdown</td></tr>
+          <tr><td>Chip animation</td><td>Done</td><td>Profile -> bet anchor -> settled pot -> winner</td></tr>
+          <tr><td>Winner visual hook</td><td>Done</td><td>Player/Bot winner GameObject refs</td></tr>
+          <tr><td>Audio hooks</td><td>Done</td><td>Draw, action voice, chips, winner</td></tr>
+          <tr><td>Click hide/show player cards</td><td>Done</td><td>Click ไพ่ player ใบไหนก็ได้แล้ว flip ทั้งสองใบ</td></tr>
+          <tr><td>Auto next hand</td><td>Done</td><td>Delay ปรับได้</td></tr>
+          <tr><td>Side pot</td><td>Not yet</td><td>จำเป็นเมื่อขยายเป็น multi-player/all-in หลายคน</td></tr>
+          <tr><td>Multi-player seats</td><td>Not yet</td><td>State machine ปัจจุบัน validate heads-up only</td></tr>
+        </table>
+      </section>
+
+      <section id="architecture">
+        <h2>Architecture</h2>
+        <p>ระบบแบ่งเป็น domain, application, UI component และ scene controller เพื่อให้ logic ใช้ซ้ำได้และทดสอบแยกจาก Unity scene ได้</p>
+
+        <div class="grid">
+          <div class="mini">
+            <h4>Domain</h4>
+            <p>ไพ่, deck, poker hand rank, evaluator และ comparer ไม่มี dependency กับ Unity</p>
+            <code>Project.Domain.Cards</code><br>
+            <code>Project.Domain.Poker</code>
+          </div>
+          <div class="mini">
+            <h4>Application</h4>
+            <p>Texas Hold'em state machine, player state, result, action และ bot AI</p>
+            <code>Project.Application.Poker</code>
+          </div>
+          <div class="mini">
+            <h4>UI Components</h4>
+            <p>CardView, animation runner และ click handler สำหรับ presentation layer</p>
+            <code>Project.UI.Components</code><br>
+            <code>Project.UI.Views</code>
+          </div>
+          <div class="mini">
+            <h4>Dev Demo</h4>
+            <p>Controller ที่ผูก state machine กับ Unity scene, UI, audio และ animation</p>
+            <code>Project.Dev.TexasHoldemOfflineGraphicDemo</code>
+          </div>
+        </div>
+
+        <h3>High-level Flow</h3>
+        <pre><code>StartGame()
+  -> CreateRoundStateMachine()
+  -> round.StartHand(...)
+  -> Deal hole cards
+  -> Human action / bot action
+  -> round.ApplyAction(...)
+  -> Animate chips and board cards
+  -> Showdown or fold win
+  -> Animate settled pot to winner
+  -> Capture stacks
+  -> Auto next hand</code></pre>
+      </section>
+
+      <section id="file-class-reference">
+        <h2>File & Class Reference</h2>
+        <p>ส่วนนี้เป็น index แบบ Unity-style สำหรับค้นหาไฟล์และ class โดยตรง ถ้าต้องการหา shuffle, hand evaluator, state machine หรือ UI component ให้เริ่มจากตารางนี้</p>
+
+        <div class="callout">
+          <strong>Search note:</strong> ไม่มี class ชื่อ <code>CardShuffle</code>. ระบบ shuffle ใช้ interface <code>ICardShuffler</code> และ implementation คือ <code>SystemRandomCardShuffler</code> หรือ <code>SecureRandomCardShuffler</code>.
+        </div>
+
+        <h3>Namespace Map</h3>
+        <table>
+          <tr><th>Namespace</th><th>Folder</th><th>Purpose</th></tr>
+          <tr><td><code>Project.Domain.Cards</code></td><td><code>Scripts/Domain/Cards</code></td><td>Card model, deck, rank/suit, shuffle, card validation</td></tr>
+          <tr><td><code>Project.Domain.Poker</code></td><td><code>Scripts/Domain/Poker</code></td><td>Generic poker hand ranking/evaluation/comparison</td></tr>
+          <tr><td><code>Project.Application.Poker</code></td><td><code>Scripts/Application/Poker</code></td><td>Texas Hold'em rules, actions, round state, bot, result data</td></tr>
+          <tr><td><code>Project.Config</code></td><td><code>Scripts/Config</code></td><td>Unity ScriptableObject data for card sprites</td></tr>
+          <tr><td><code>Project.UI.Components</code></td><td><code>Scripts/UI/Views</code></td><td>CardView display component</td></tr>
+          <tr><td><code>Project.UI.Views</code></td><td><code>Scripts/UI/Views</code></td><td>Card animation and card click helper</td></tr>
+          <tr><td><code>Project.Dev</code></td><td><code>Scripts/Dev</code></td><td>Playable demo controller and smoke test</td></tr>
+          <tr><td><code>Project.EditorTools</code></td><td><code>Scripts/Editor</code></td><td>Unity editor utility for building card sprite database</td></tr>
+        </table>
+
+        <h3>Project.Domain.Cards</h3>
+        <table>
+          <tr><th>File</th><th>Type</th><th>Public API</th><th>Description</th></tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/Card.cs</code></td>
+            <td><code>readonly struct Card</code></td>
+            <td><code>Rank</code>, <code>Suit</code>, <code>Equals</code>, <code>GetHashCode</code>, <code>ToString</code>, <code>==</code>, <code>!=</code></td>
+            <td>Value object ของไพ่ 1 ใบ เช่น Ace of Spades. ใช้เป็น key ใน dictionary ได้เพราะ override equality/hash แล้ว</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/Rank.cs</code></td>
+            <td><code>enum Rank</code></td>
+            <td><code>Two = 2</code> ถึง <code>Ace = 14</code></td>
+            <td>ลำดับ rank ของไพ่ ใช้ integer value ใน poker evaluator</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/Suit.cs</code></td>
+            <td><code>enum Suit</code></td>
+            <td><code>Clubs</code>, <code>Diamonds</code>, <code>Hearts</code>, <code>Spades</code></td>
+            <td>Suit ทั้ง 4 แบบ</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/Deck.cs</code></td>
+            <td><code>sealed class Deck</code></td>
+            <td><code>RemainingCount</code>, <code>IsEmpty</code>, <code>Cards</code>, <code>Shuffle(ICardShuffler)</code>, <code>Draw()</code>, <code>Draw(int)</code></td>
+            <td>Deck mutable ที่ draw ไพ่จากท้าย list, validate duplicate ตอนสร้างและหลัง shuffle</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/DeckFactory.cs</code></td>
+            <td><code>static class DeckFactory</code></td>
+            <td><code>CreateStandard52CardDeck()</code>, <code>CreateStandard52Cards()</code></td>
+            <td>Factory สำหรับสร้าง deck มาตรฐาน 52 ใบ</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/ICardShuffler.cs</code></td>
+            <td><code>interface ICardShuffler</code></td>
+            <td><code>Shuffle(IReadOnlyList&lt;Card&gt; cards)</code></td>
+            <td>Abstraction สำหรับ shuffle algorithm. Inject เข้า <code>Deck.Shuffle</code> และ <code>TexasHoldemRoundStateMachine</code></td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/SystemRandomCardShuffler.cs</code></td>
+            <td><code>sealed class SystemRandomCardShuffler : ICardShuffler</code></td>
+            <td><code>SystemRandomCardShuffler()</code>, <code>SystemRandomCardShuffler(int seed)</code>, <code>Shuffle(...)</code></td>
+            <td>Fisher-Yates shuffle ด้วย <code>System.Random</code>. ใช้ seed ได้ เหมาะกับ deterministic test/demo</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/SecureRandomCardShuffler.cs</code></td>
+            <td><code>sealed class SecureRandomCardShuffler : ICardShuffler</code></td>
+            <td><code>Shuffle(...)</code></td>
+            <td>Fisher-Yates shuffle ด้วย <code>RandomNumberGenerator.GetInt32</code>. เหมาะกับ gameplay ที่ไม่ต้อง deterministic</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Cards/CardCollectionValidator.cs</code></td>
+            <td><code>static class CardCollectionValidator</code></td>
+            <td><code>EnsureNoDuplicateCards(IEnumerable&lt;Card&gt;, string)</code></td>
+            <td>Utility validate duplicate cards ใช้ใน deck/evaluator</td>
+          </tr>
+        </table>
+
+        <h3>Project.Domain.Poker</h3>
+        <table>
+          <tr><th>File</th><th>Type</th><th>Public API</th><th>Description</th></tr>
+          <tr>
+            <td><code>Scripts/Domain/Poker/PokerHandRank.cs</code></td>
+            <td><code>enum PokerHandRank</code></td>
+            <td><code>HighCard</code> ถึง <code>RoyalFlush</code></td>
+            <td>Ranking order ของ poker hand. ค่า enum สูงกว่าคือ hand ดีกว่า</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Poker/PokerHandResult.cs</code></td>
+            <td><code>sealed class PokerHandResult</code></td>
+            <td><code>Rank</code>, <code>TieBreakers</code>, <code>ToString()</code></td>
+            <td>ผลประเมินไพ่ 5 ใบ พร้อม tie breaker สำหรับ compare</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Poker/PokerHandEvaluator.cs</code></td>
+            <td><code>sealed class PokerHandEvaluator</code></td>
+            <td><code>Evaluate(IReadOnlyList&lt;Card&gt; cards)</code></td>
+            <td>ประเมินไพ่ 5 ใบเท่านั้น และคืน <code>PokerHandResult</code>. รองรับ straight, flush, full house, royal flush ฯลฯ</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Poker/PokerHandComparer.cs</code></td>
+            <td><code>sealed class PokerHandComparer</code></td>
+            <td><code>Compare(PokerHandResult left, PokerHandResult right)</code></td>
+            <td>เปรียบเทียบ hand result ด้วย rank ก่อน แล้ว tie breakers</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Poker/BestPokerHandResult.cs</code></td>
+            <td><code>sealed class BestPokerHandResult</code></td>
+            <td><code>HandResult</code>, <code>BestCards</code>, <code>ToString()</code></td>
+            <td>ผล best-five evaluation มีทั้ง rank result และ card 5 ใบที่ดีที่สุด</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Domain/Poker/BestFiveCardPokerHandEvaluator.cs</code></td>
+            <td><code>sealed class BestFiveCardPokerHandEvaluator</code></td>
+            <td><code>EvaluateBestHand(IReadOnlyList&lt;Card&gt; cards)</code></td>
+            <td>รับ 5-7 ใบ แล้วลอง combination ทั้งหมดเพื่อหา best 5 cards. ใช้หลักใน Texas Hold'em showdown</td>
+          </tr>
+        </table>
+
+        <h3>Project.Application.Poker</h3>
+        <table>
+          <tr><th>File</th><th>Type</th><th>Public API</th><th>Description</th></tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/TexasHoldemStreet.cs</code></td>
+            <td><code>enum TexasHoldemStreet</code></td>
+            <td><code>NotStarted</code>, <code>PreFlop</code>, <code>Flop</code>, <code>Turn</code>, <code>River</code>, <code>Showdown</code>, <code>HandComplete</code></td>
+            <td>สถานะ street ของ hand</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/TexasHoldemPlayerActionType.cs</code></td>
+            <td><code>enum TexasHoldemPlayerActionType</code></td>
+            <td><code>Fold</code>, <code>Check</code>, <code>Call</code>, <code>Bet</code>, <code>Raise</code>, <code>AllIn</code></td>
+            <td>ชนิด action ที่ state machine รองรับ</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/TexasHoldemPlayerAction.cs</code></td>
+            <td><code>readonly struct TexasHoldemPlayerAction</code></td>
+            <td><code>ActionType</code>, <code>Amount</code>, <code>Fold()</code>, <code>Check()</code>, <code>Call()</code>, <code>Bet(int)</code>, <code>RaiseTo(int)</code>, <code>AllIn()</code></td>
+            <td>Command object สำหรับส่ง action เข้า state machine. <code>RaiseTo</code> คือ total street bet ไม่ใช่เพิ่มอีกเท่าไร</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/TexasHoldemRoundStateMachine.cs</code></td>
+            <td><code>sealed class TexasHoldemRoundStateMachine</code></td>
+            <td><code>StartHand</code>, <code>ApplyAction</code>, <code>CanPlayerAct</code>, <code>GetAmountToCall</code>, <code>CanCheck</code>, <code>GetMinimumLegalRaiseTo</code>, <code>GetMinimumLegalBet</code>, public state properties</td>
+            <td>แกนเกม Texas Hold'em heads-up. จัดการ blinds, ante, current turn, validation, street progression, all-in runout, showdown และ result</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/TexasHoldemRoundPlayerState.cs</code></td>
+            <td><code>sealed class TexasHoldemRoundPlayerState</code></td>
+            <td><code>PlayerId</code>, <code>SeatIndex</code>, <code>IsBot</code>, <code>Chips</code>, <code>StreetBet</code>, <code>TotalCommitted</code>, <code>HasFolded</code>, <code>IsAllIn</code>, <code>HasActedThisStreet</code>, <code>HoleCards</code></td>
+            <td>Read-only public state ของ player ต่อ hand. Mutations เป็น internal เพื่อให้ state machine คุม rule เอง</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/TexasHoldemRoundResult.cs</code></td>
+            <td><code>sealed class TexasHoldemRoundResult</code></td>
+            <td><code>BoardCards</code>, <code>Players</code></td>
+            <td>Result object หลัง hand จบ</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/TexasHoldemPlayerResult.cs</code></td>
+            <td><code>sealed class TexasHoldemPlayerResult</code></td>
+            <td><code>PlayerId</code>, <code>HoleCards</code>, <code>BestHand</code>, <code>IsWinner</code></td>
+            <td>ผลของ player แต่ละคนใน hand result. ถ้าชนะด้วย fold, <code>BestHand</code> เป็น null ได้</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/TexasHoldemOfflineRoundSimulator.cs</code></td>
+            <td><code>sealed class TexasHoldemOfflineRoundSimulator</code></td>
+            <td><code>PlayRound(IReadOnlyList&lt;string&gt; playerIds)</code></td>
+            <td>Simulator เก่า/utility สำหรับ deal full board และ evaluate winner โดยไม่มี betting state</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Application/Poker/SimpleTexasHoldemBot.cs</code></td>
+            <td><code>sealed class SimpleTexasHoldemBot</code></td>
+            <td><code>SimpleTexasHoldemBot()</code>, <code>SimpleTexasHoldemBot(int seed)</code>, <code>ChooseAction(TexasHoldemRoundStateMachine round)</code></td>
+            <td>Bot AI baseline ใช้ equity simulation, pot odds, bluff, aggression, looseness และ all-in heuristics</td>
+          </tr>
+        </table>
+
+        <h3>Unity Config, UI, Editor, Dev</h3>
+        <table>
+          <tr><th>File</th><th>Type</th><th>Public API</th><th>Description</th></tr>
+          <tr>
+            <td><code>Scripts/Config/CardSpriteEntry.cs</code></td>
+            <td><code>sealed class CardSpriteEntry</code></td>
+            <td><code>rank</code>, <code>suit</code>, <code>sprite</code></td>
+            <td>Serializable entry สำหรับ map card เป็น sprite ใน database</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Config/CardSpriteDatabase.cs</code></td>
+            <td><code>sealed class CardSpriteDatabase : ScriptableObject</code></td>
+            <td><code>CardBackSprite</code>, <code>GetSprite(Card)</code></td>
+            <td>ScriptableObject สำหรับ lookup sprite หน้าไพ่และหลังไพ่</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/UI/Views/CardView.cs</code></td>
+            <td><code>sealed class CardView : MonoBehaviour</code></td>
+            <td><code>Card</code>, <code>RectTransform</code>, <code>Setup</code>, <code>SetFaceUp</code>, <code>SetHighlighted</code>, <code>SetVisible</code></td>
+            <td>View component สำหรับแสดงไพ่หนึ่งใบ</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/UI/Views/CardAnimationRunner.cs</code></td>
+            <td><code>sealed class CardAnimationRunner : MonoBehaviour</code></td>
+            <td><code>MoveToSlot</code>, <code>FlipFace</code>, <code>FlipFaces</code></td>
+            <td>Coroutine animations สำหรับ deal/move/flip card UI</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/UI/Views/CardClickHandler.cs</code></td>
+            <td><code>sealed class CardClickHandler : MonoBehaviour, IPointerClickHandler</code></td>
+            <td><code>Initialize(Action&lt;CardView&gt;)</code>, <code>OnPointerClick</code></td>
+            <td>รับ click บน CardView แล้วส่ง callback ให้ controller</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Editor/CardSpriteDatabaseAutoBuilder.cs</code></td>
+            <td><code>static class CardSpriteDatabaseAutoBuilder</code></td>
+            <td><code>CreateFromSelectedFolder()</code></td>
+            <td>Editor menu: <code>Project/Card Game/Create Standard Card Sprite Database From Selected Folder</code> ใช้สร้าง database จาก folder sprite ไพ่</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Dev/TexasHoldemOfflineGraphicDemo.cs</code></td>
+            <td><code>sealed class TexasHoldemOfflineGraphicDemo : MonoBehaviour</code></td>
+            <td><code>StartGame()</code>, inspector references, runtime controller methods</td>
+            <td>Playable Unity demo controller ที่เชื่อม state machine กับ UI, audio, animation, bot, chip flow และ auto hand</td>
+          </tr>
+          <tr>
+            <td><code>Scripts/Dev/TexasHoldemOfflineSmokeTest.cs</code></td>
+            <td><code>sealed class TexasHoldemOfflineSmokeTest : MonoBehaviour</code></td>
+            <td>Runs from <code>Start()</code></td>
+            <td>Smoke test component สำหรับเล่น round แบบไม่มี UI แล้ว log board/pot/result</td>
+          </tr>
+        </table>
+
+        <h3>Common Lookup Terms</h3>
+        <table>
+          <tr><th>What You Search</th><th>Use This Class/File</th></tr>
+          <tr><td>CardShuffle / Shuffle cards</td><td><code>ICardShuffler</code>, <code>SystemRandomCardShuffler</code>, <code>SecureRandomCardShuffler</code></td></tr>
+          <tr><td>HandEvaluator / poker rank</td><td><code>PokerHandEvaluator</code>, <code>BestFiveCardPokerHandEvaluator</code></td></tr>
+          <tr><td>Best 5 cards highlight</td><td><code>BestPokerHandResult.BestCards</code>, <code>TexasHoldemOfflineGraphicDemo.HighlightWinnerCards</code></td></tr>
+          <tr><td>Bot action</td><td><code>SimpleTexasHoldemBot.ChooseAction</code></td></tr>
+          <tr><td>Apply player action</td><td><code>TexasHoldemRoundStateMachine.ApplyAction</code></td></tr>
+          <tr><td>Legal raise amount</td><td><code>TexasHoldemRoundStateMachine.GetMinimumLegalRaiseTo</code></td></tr>
+          <tr><td>Card sprite lookup</td><td><code>CardSpriteDatabase.GetSprite</code></td></tr>
+          <tr><td>Flip card animation</td><td><code>CardAnimationRunner.FlipFace</code>, <code>FlipFaces</code></td></tr>
+        </table>
+      </section>
+
+      <section id="scene-setup">
+        <h2>Unity Scene Setup</h2>
+        <p>Scene ต้องสร้าง UI/anchors ไว้ล่วงหน้าและลาก references ผ่าน Inspector. Controller ไม่สร้างปุ่ม action หรือ slider เองตอน runtime.</p>
+
+        <h3>Required GameObjects</h3>
+        <table>
+          <tr><th>GameObject</th><th>Component</th><th>Purpose</th></tr>
+          <tr><td>GameController</td><td><code>TexasHoldemOfflineGraphicDemo</code>, optional <code>CardAnimationRunner</code>, optional <code>AudioSource</code></td><td>ควบคุม demo scene</td></tr>
+          <tr><td>Canvas</td><td><code>Canvas</code>, <code>GraphicRaycaster</code></td><td>UI root และ card click raycast</td></tr>
+          <tr><td>EventSystem</td><td><code>EventSystem</code></td><td>รับ pointer/click/button events</td></tr>
+          <tr><td>CardLayer</td><td><code>RectTransform</code></td><td>Parent ตอน instantiate cards/chip movement visuals</td></tr>
+          <tr><td>DeckAnchor</td><td><code>RectTransform</code></td><td>ตำแหน่งเริ่มดีลไพ่</td></tr>
+          <tr><td>PlayerSlots[2]</td><td><code>RectTransform</code></td><td>ตำแหน่งไพ่ player 2 ใบ</td></tr>
+          <tr><td>BotSlots[2]</td><td><code>RectTransform</code></td><td>ตำแหน่งไพ่ bot 2 ใบ</td></tr>
+          <tr><td>BoardSlots[5]</td><td><code>RectTransform</code></td><td>ตำแหน่ง flop, turn, river</td></tr>
+          <tr><td>Bet Anchors</td><td><code>RectTransform</code></td><td>ตำแหน่งชิปหน้า player/bot</td></tr>
+          <tr><td>Settled Pot Anchor</td><td><code>RectTransform</code></td><td>ตำแหน่งชิป pot กลางโต๊ะ</td></tr>
+          <tr><td>Action Buttons</td><td><code>Button</code>, <code>TMP_Text</code></td><td>Fold, Check/Call, Bet/Raise/All In</td></tr>
+          <tr><td>Bet Slider Group</td><td><code>Slider</code>, buttons, TMP text, container</td><td>เลือก amount สำหรับ bet/raise</td></tr>
+          <tr><td>Winner Visuals</td><td>Any GameObject</td><td>เปิดตาม winner</td></tr>
+        </table>
+
+        <h3>CardView Prefab</h3>
+        <ul>
+          <li>ต้องมี <code>CardView</code></li>
+          <li>ต้องมี <code>Image</code> และเปิด <code>Raycast Target</code> ถ้าต้องการ click hide/show</li>
+          <li>ต้องมี <code>CanvasGroup</code></li>
+          <li>Optional: <code>Outline</code> สำหรับ highlight</li>
+        </ul>
+      </section>
+
+      <section id="demo-controller">
+        <h2>Demo Controller Fields</h2>
+        <p>Class: <code>Project.Dev.TexasHoldemOfflineGraphicDemo</code></p>
+
+        <h3>Config</h3>
+        <table>
+          <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+          <tr><td><code>cardSpriteDatabase</code></td><td><code>CardSpriteDatabase</code></td><td>Mapping ไพ่เป็น sprite</td></tr>
+          <tr><td><code>cardViewPrefab</code></td><td><code>CardView</code></td><td>Prefab ไพ่สำหรับ instantiate</td></tr>
+        </table>
+
+        <h3>Action UI</h3>
+        <table>
+          <tr><th>Field</th><th>Description</th></tr>
+          <tr><td><code>leftActionButton</code></td><td>Fold</td></tr>
+          <tr><td><code>middleActionButton</code></td><td>Check หรือ Call ตาม state</td></tr>
+          <tr><td><code>rightActionButton</code></td><td>Bet, Raise หรือ All In ตาม state</td></tr>
+          <tr><td><code>betSliderContainer</code></td><td>ซ่อน/โชว์กลุ่ม slider ทั้งชุด</td></tr>
+          <tr><td><code>selectedBetAmountContainer</code></td><td>ซ่อน/โชว์ background ของ amount text</td></tr>
+        </table>
+
+        <h3>Game Rules</h3>
+        <table>
+          <tr><th>Field</th><th>Default</th><th>Description</th></tr>
+          <tr><td><code>startingChips</code></td><td>100000</td><td>Stack เริ่มต้น</td></tr>
+          <tr><td><code>smallBlind</code></td><td>400</td><td>Small blind</td></tr>
+          <tr><td><code>bigBlind</code></td><td>800</td><td>Big blind</td></tr>
+          <tr><td><code>anteEnabled</code></td><td>true</td><td>เปิด/ปิด ante</td></tr>
+          <tr><td><code>anteAmount</code></td><td>80</td><td>Ante ต่อคน</td></tr>
+          <tr><td><code>turnTimeLimitSeconds</code></td><td>15</td><td>เวลาต่อ turn</td></tr>
+          <tr><td><code>autoNewHandDelaySeconds</code></td><td>5</td><td>Delay ก่อนเริ่ม hand ใหม่</td></tr>
+          <tr><td><code>botThinkDelayRangeSeconds</code></td><td>3-5</td><td>ช่วงเวลา bot thinking</td></tr>
+        </table>
+
+        <h3>Audio Hooks</h3>
+        <table>
+          <tr><th>Field</th><th>Use Case</th></tr>
+          <tr><td><code>drawCardClip</code>, <code>drawCardClip2</code></td><td>ดีลไพ่และ flip hide/show ไพ่ player</td></tr>
+          <tr><td><code>checkVoiceClip</code>, <code>checkKnockClip</code></td><td>Check</td></tr>
+          <tr><td><code>callVoiceClip</code></td><td>Call</td></tr>
+          <tr><td><code>betVoiceClip</code></td><td>Bet</td></tr>
+          <tr><td><code>raiseVoiceClip</code></td><td>Raise</td></tr>
+          <tr><td><code>foldVoiceClip</code>, <code>foldCardsClip</code></td><td>Fold</td></tr>
+          <tr><td><code>allInVoiceClip</code></td><td>All In</td></tr>
+          <tr><td><code>placeChipsClip</code></td><td>ชิปจาก profile ไป bet anchor และ settled pot ไป winner bet anchor</td></tr>
+          <tr><td><code>collectChipsClip</code></td><td>รวม street bets เข้า settled pot</td></tr>
+          <tr><td><code>chipsEarnedClip</code></td><td>Winner รับชิปเข้า profile</td></tr>
+          <tr><td><code>winnerClip</code></td><td>ประกาศ winner</td></tr>
+        </table>
+      </section>
+
+      <section id="game-flow">
+        <h2>Runtime Flow</h2>
+
+        <h3>Start Hand</h3>
+        <ol>
+          <li><code>StartGame()</code> หยุด coroutine เก่าและเริ่ม <code>RunInteractiveHand()</code></li>
+          <li>สร้าง <code>TexasHoldemRoundStateMachine</code></li>
+          <li>เรียก <code>StartHand()</code> พร้อม player ids, stack, dealer index และ bot ids</li>
+          <li>State machine โพสต์ ante/blinds และ deal hole cards</li>
+          <li>Controller animate การแจกไพ่บน Unity UI</li>
+        </ol>
+
+        <h3>Action</h3>
+        <ol>
+          <li>Human กดปุ่ม หรือ bot เลือก action จาก <code>SimpleTexasHoldemBot.ChooseAction(round)</code></li>
+          <li>Controller เรียก <code>round.ApplyAction(playerId, action)</code></li>
+          <li>State machine validate turn/action และ resolve street</li>
+          <li>Controller animate chips, board cards, text, timer และ rank</li>
+        </ol>
+
+        <h3>Showdown / End Hand</h3>
+        <ol>
+          <li>ถ้า fold เหลือ active player คนเดียว จบด้วย fold win</li>
+          <li>ถ้า all-in ถูก call แล้วไม่มี future betting ระบบ runout board จน river แล้ว showdown</li>
+          <li>เปิด bot cards, แสดง rank, highlight best five cards</li>
+          <li>Settled pot move to winner bet anchor, hold, แล้ว move เข้า profile</li>
+          <li>Capture stack ต่อเนื่อง และ auto next hand</li>
+        </ol>
+      </section>
+
+      <section id="api-round">
+        <h2>Round State Machine API</h2>
+        <p>Class: <code>Project.Application.Poker.TexasHoldemRoundStateMachine</code></p>
+
+        <h3>Constructor</h3>
+        <pre><code>var round = new TexasHoldemRoundStateMachine(
+    cardShuffler,
+    bestHandEvaluator,
+    handComparer,
+    smallBlind: 400,
+    bigBlind: 800,
+    anteEnabled: true,
+    anteAmount: 80
+);</code></pre>
+
+        <h3>Important Properties</h3>
+        <table>
+          <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+          <tr><td><code>Street</code></td><td><code>TexasHoldemStreet</code></td><td>NotStarted, PreFlop, Flop, Turn, River, Showdown, HandComplete</td></tr>
+          <tr><td><code>Players</code></td><td><code>IReadOnlyList&lt;TexasHoldemRoundPlayerState&gt;</code></td><td>Player states</td></tr>
+          <tr><td><code>CurrentPlayer</code></td><td><code>TexasHoldemRoundPlayerState</code></td><td>ผู้เล่นที่ต้อง act ตอนนี้, null เมื่อ hand complete</td></tr>
+          <tr><td><code>BoardCards</code></td><td><code>IReadOnlyList&lt;Card&gt;</code></td><td>ไพ่ board ที่ state machine deal แล้ว</td></tr>
+          <tr><td><code>LivePot</code></td><td><code>int</code></td><td>เงินทั้งหมดที่ committed แล้ว รวม street bets ปัจจุบัน</td></tr>
+          <tr><td><code>SettledPot</code></td><td><code>int</code></td><td>เงินที่ settle แล้ว ไม่รวม street bets ปัจจุบัน</td></tr>
+          <tr><td><code>AmountToCall</code></td><td><code>int</code></td><td>จำนวนที่ current player ต้อง call</td></tr>
+          <tr><td><code>CurrentStreetBet</code></td><td><code>int</code></td><td>Bet สูงสุดใน street ปัจจุบัน</td></tr>
+          <tr><td><code>RoundResult</code></td><td><code>TexasHoldemRoundResult</code></td><td>ผลหลังจบ hand</td></tr>
+        </table>
+
+        <h3>Important Methods</h3>
+        <table>
+          <tr><th>Method</th><th>Description</th></tr>
+          <tr><td><code>StartHand(playerIds, startingChips, dealerIndex, botPlayerIds)</code></td><td>เริ่ม hand ใหม่โดยใช้ chips เท่ากันทุกคน</td></tr>
+          <tr><td><code>StartHand(playerIds, startingChipsByPlayer, dealerIndex, botPlayerIds)</code></td><td>เริ่ม hand ใหม่โดยกำหนด stack แต่ละคนได้</td></tr>
+          <tr><td><code>CanPlayerAct(playerId)</code></td><td>ตรวจว่า player นี้เป็น current turn หรือไม่</td></tr>
+          <tr><td><code>ApplyAction(playerId, action)</code></td><td>Apply Fold/Check/Call/Bet/Raise/AllIn แล้ว resolve state</td></tr>
+          <tr><td><code>GetAmountToCall(playerId)</code></td><td>คำนวณ amount to call ของ player</td></tr>
+          <tr><td><code>CanCheck(playerId)</code></td><td>true เมื่อ amount to call เป็น 0</td></tr>
+          <tr><td><code>GetMinimumLegalRaiseTo(playerId)</code></td><td>Total street bet ขั้นต่ำสำหรับ raise</td></tr>
+          <tr><td><code>GetMinimumLegalBet(playerId)</code></td><td>Bet ขั้นต่ำ ปัจจุบันเท่ากับ big blind</td></tr>
+        </table>
+      </section>
+
+      <section id="api-actions">
+        <h2>Player Action API</h2>
+        <p>Struct: <code>TexasHoldemPlayerAction</code></p>
+        <pre><code>TexasHoldemPlayerAction.Fold();
+TexasHoldemPlayerAction.Check();
+TexasHoldemPlayerAction.Call();
+TexasHoldemPlayerAction.Bet(1600);
+TexasHoldemPlayerAction.RaiseTo(3200);
+TexasHoldemPlayerAction.AllIn();</code></pre>
+
+        <div class="callout warning">
+          <strong>Important:</strong> <code>RaiseTo</code> รับค่าเป็น total street bet ไม่ใช่ additional amount เช่น current bet 800 แล้ว raise เป็น 1600 ต้องส่ง <code>RaiseTo(1600)</code>
+        </div>
+      </section>
+
+      <section id="api-bot">
+        <h2>Bot API</h2>
+        <p>Class: <code>SimpleTexasHoldemBot</code></p>
+        <pre><code>var bot = new SimpleTexasHoldemBot();
+
+if (round.CurrentPlayer.IsBot)
+{
+    TexasHoldemPlayerAction action = bot.ChooseAction(round);
+    round.ApplyAction(round.CurrentPlayer.PlayerId, action);
+}</code></pre>
+
+        <h3>Decision Model</h3>
+        <ul>
+          <li>Monte Carlo-style equity estimation จาก hole cards + board cards</li>
+          <li>Pot odds เมื่อต้อง call</li>
+          <li>Personality randomization: aggression, looseness, bluff rate</li>
+          <li>Bet/raise sizing ตาม pot fraction</li>
+          <li>All-in range สำหรับ strong hand, short stack และบาง bluff spot</li>
+        </ul>
+      </section>
+
+      <section id="api-hand-evaluator">
+        <h2>Poker Hand Evaluator API</h2>
+        <p>Hand evaluator แยกจาก Texas Hold'em และสามารถใช้กับ poker analysis อื่นได้</p>
+
+        <h3>Evaluate 5 Cards</h3>
+        <pre><code>var evaluator = new PokerHandEvaluator();
+PokerHandResult result = evaluator.Evaluate(new[]
+{
+    new Card(Rank.Ace, Suit.Spades),
+    new Card(Rank.King, Suit.Spades),
+    new Card(Rank.Queen, Suit.Spades),
+    new Card(Rank.Jack, Suit.Spades),
+    new Card(Rank.Ten, Suit.Spades)
+});
+
+Debug.Log(result.Rank); // RoyalFlush</code></pre>
+
+        <h3>Evaluate Best 5 From 7</h3>
+        <pre><code>var comparer = new PokerHandComparer();
+var bestEvaluator = new BestFiveCardPokerHandEvaluator(
+    new PokerHandEvaluator(),
+    comparer
+);
+
+BestPokerHandResult best = bestEvaluator.EvaluateBestHand(sevenCards);
+Debug.Log(best.HandResult.Rank);
+Debug.Log(string.Join(", ", best.BestCards));</code></pre>
+      </section>
+
+      <section id="ui-api">
+        <h2>UI Components API</h2>
+
+        <h3>CardView</h3>
+        <table>
+          <tr><th>Method / Property</th><th>Description</th></tr>
+          <tr><td><code>Setup(card, frontSprite, backSprite, faceUp)</code></td><td>กำหนด card data และ sprite</td></tr>
+          <tr><td><code>SetFaceUp(bool)</code></td><td>เปลี่ยน sprite เป็นหน้าไพ่หรือหลังไพ่ทันที</td></tr>
+          <tr><td><code>SetHighlighted(bool)</code></td><td>เปิด/ปิด outline highlight</td></tr>
+          <tr><td><code>SetVisible(bool)</code></td><td>ซ่อน/โชว์ด้วย CanvasGroup</td></tr>
+          <tr><td><code>Card</code></td><td>ไพ่ที่ view นี้แสดง</td></tr>
+          <tr><td><code>RectTransform</code></td><td>RectTransform ของ card UI</td></tr>
+        </table>
+
+        <h3>CardAnimationRunner</h3>
+        <table>
+          <tr><th>Method</th><th>Description</th></tr>
+          <tr><td><code>MoveToSlot(cardView, targetSlot, duration)</code></td><td>Animate card ไปยัง slot แล้ว set parent</td></tr>
+          <tr><td><code>FlipFace(cardView, faceUp, duration)</code></td><td>Flip ไพ่ใบเดียว</td></tr>
+          <tr><td><code>FlipFaces(cardViews, faceUp, duration)</code></td><td>Flip ไพ่หลายใบพร้อมกัน</td></tr>
+        </table>
+
+        <h3>CardClickHandler</h3>
+        <pre><code>CardClickHandler clickHandler = cardView.GetComponent&lt;CardClickHandler&gt;();
+
+if (clickHandler == null)
+    clickHandler = cardView.gameObject.AddComponent&lt;CardClickHandler&gt;();
+
+clickHandler.Initialize(clickedCardView =>
+{
+    Debug.Log($"Clicked: {clickedCardView.Card}");
+});</code></pre>
+      </section>
+
+      <section id="code-examples">
+        <h2>Code Examples</h2>
+
+        <h3>Example 1: Start and Play One Hand Without Unity UI</h3>
+        <pre><code>using Project.Application.Poker;
+using Project.Domain.Cards;
+using Project.Domain.Poker;
+
+var comparer = new PokerHandComparer();
+var bestEvaluator = new BestFiveCardPokerHandEvaluator(
+    new PokerHandEvaluator(),
+    comparer
+);
+
+var round = new TexasHoldemRoundStateMachine(
+    new SystemRandomCardShuffler(),
+    bestEvaluator,
+    comparer,
+    smallBlind: 400,
+    bigBlind: 800,
+    anteEnabled: true,
+    anteAmount: 80
+);
+
+round.StartHand(
+    playerIds: new[] { "Player", "Bot" },
+    startingChipsByPlayer: new[] { 50000, 50000 },
+    dealerIndex: 0,
+    botPlayerIds: new[] { "Bot" }
+);
+
+while (!round.IsHandComplete)
+{
+    var current = round.CurrentPlayer;
+
+    if (round.AmountToCall == 0)
+        round.ApplyAction(current.PlayerId, TexasHoldemPlayerAction.Check());
+    else
+        round.ApplyAction(current.PlayerId, TexasHoldemPlayerAction.Call());
+}
+
+foreach (var result in round.RoundResult.Players)
+{
+    Console.WriteLine($"{result.PlayerId} winner: {result.IsWinner}");
+}</code></pre>
+
+        <h3>Example 2: Human Action Buttons</h3>
+        <pre><code>public void OnMiddleActionPressed()
+{
+    if (!round.CanPlayerAct("Player"))
+        return;
+
+    if (round.AmountToCall == 0)
+        round.ApplyAction("Player", TexasHoldemPlayerAction.Check());
+    else
+        round.ApplyAction("Player", TexasHoldemPlayerAction.Call());
+}
+
+public void OnRightActionPressed(int selectedRaiseTo)
+{
+    if (round.CurrentStreetBet == 0)
+        round.ApplyAction("Player", TexasHoldemPlayerAction.Bet(selectedRaiseTo));
+    else
+        round.ApplyAction("Player", TexasHoldemPlayerAction.RaiseTo(selectedRaiseTo));
+}</code></pre>
+
+        <h3>Example 3: Legal Bet Slider Range</h3>
+        <pre><code>int min;
+int max;
+
+var player = round.CurrentPlayer;
+
+if (round.CurrentStreetBet == 0)
+{
+    min = round.GetMinimumLegalBet(player.PlayerId);
+    max = player.Chips;
+}
+else
+{
+    min = round.GetMinimumLegalRaiseTo(player.PlayerId);
+    max = player.StreetBet + player.Chips;
+}
+
+betSlider.minValue = min;
+betSlider.maxValue = max;</code></pre>
+
+        <h3>Example 4: Use Bot Decision</h3>
+        <pre><code>var bot = new SimpleTexasHoldemBot();
+
+if (round.CurrentPlayer != null && round.CurrentPlayer.IsBot)
+{
+    TexasHoldemPlayerAction action = bot.ChooseAction(round);
+    round.ApplyAction(round.CurrentPlayer.PlayerId, action);
+}</code></pre>
+
+        <h3>Example 5: Show Winner</h3>
+        <pre><code>TexasHoldemRoundResult result = round.RoundResult;
+
+foreach (TexasHoldemPlayerResult player in result.Players)
+{
+    if (player.IsWinner)
+    {
+        Debug.Log($"Winner: {player.PlayerId}");
+
+        if (player.BestHand != null)
+            Debug.Log($"Best hand: {player.BestHand.HandResult.Rank}");
+    }
+}</code></pre>
+
+        <h3>Example 6: Flip Player Cards</h3>
+        <pre><code>private bool playerCardsFaceUp = true;
+
+private IEnumerator ToggleCards(IReadOnlyList&lt;CardView&gt; cards)
+{
+    playerCardsFaceUp = !playerCardsFaceUp;
+    yield return animationRunner.FlipFaces(cards, playerCardsFaceUp, 0.24f);
+}</code></pre>
+      </section>
+
+      <section id="reuse">
+        <h2>Reusable Parts</h2>
+        <table>
+          <tr><th>Reusable Part</th><th>Can Be Used For</th></tr>
+          <tr><td><code>Deck</code>, <code>DeckFactory</code>, <code>Card</code></td><td>เกมไพ่ทุกชนิด</td></tr>
+          <tr><td><code>PokerHandEvaluator</code></td><td>โหมด poker อื่น หรือ hand analyzer</td></tr>
+          <tr><td><code>BestFiveCardPokerHandEvaluator</code></td><td>Texas Hold'em, Omaha, replay/result system</td></tr>
+          <tr><td><code>TexasHoldemRoundStateMachine</code></td><td>Offline mode, tutorial mode, bot simulation, server-side validation starting point</td></tr>
+          <tr><td><code>SimpleTexasHoldemBot</code></td><td>Bot practice mode, QA smoke tests, AI baseline</td></tr>
+          <tr><td><code>CardView</code></td><td>ทุก UI ที่ต้องแสดงไพ่</td></tr>
+          <tr><td><code>CardAnimationRunner</code></td><td>Deal/flip animations ของ card UI</td></tr>
+          <tr><td><code>CardClickHandler</code></td><td>Interaction บน card เช่น inspect, hide/show, select card</td></tr>
+        </table>
+      </section>
+
+    </main>
+  </div>
+</body>
+</html>

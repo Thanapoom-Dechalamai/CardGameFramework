@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6158023704878935692}
   - component: {fileID: 8091585114731432369}
   - component: {fileID: 713253958198180108}
+  - component: {fileID: 6510617152380383827}
   m_Layer: 5
   m_Name: CardView
   m_TagString: Untagged
@@ -62,6 +63,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.UI.Components.CardView
   image: {fileID: 6158023704878935692}
   outline: {fileID: 713253958198180108}
+  dimOverlay: {fileID: 0}
+  fallbackDimmedColor: {r: 0.35, g: 0.35, b: 0.35, a: 1}
 --- !u!114 &6158023704878935692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,7 +85,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 2099589491628684666, guid: 39787bc3d8f6c7541ab96ab3744fc144, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -111,11 +114,24 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4423326048817720149}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
-  m_EffectColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  m_EffectDistance: {x: 4, y: -4}
-  m_UseGraphicAlpha: 1
+  m_EffectColor: {r: 1, g: 0.9018892, b: 0.031372547, a: 1}
+  m_EffectDistance: {x: 4, y: 4}
+  m_UseGraphicAlpha: 0
+--- !u!114 &6510617152380383827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4423326048817720149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 1
