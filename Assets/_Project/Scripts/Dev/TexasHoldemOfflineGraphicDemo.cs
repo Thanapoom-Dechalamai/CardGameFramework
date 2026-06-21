@@ -1039,6 +1039,11 @@ namespace Project.Dev
             cards.AddRange(player.HoleCards);
             cards.AddRange(GetVisibleBoardCards());
 
+            return EvaluatePreview(cards);
+        }
+
+        private TexasHoldemHandPreview EvaluatePreview(IReadOnlyList<Card> cards)
+        {
             if (cards.Count >= 5)
                 return EvaluateFiveToSevenCardPreview(cards);
 
@@ -1146,7 +1151,7 @@ namespace Project.Dev
 
             foreach (TexasHoldemRoundPlayerState player in _round.Players)
             {
-                TexasHoldemHandPreview preview = EvaluatePreview(player);
+                TexasHoldemHandPreview preview = EvaluatePreview(GetShownCardsForHighlight(player));
 
                 if (preview.Rank == PokerHandRank.HighCard)
                     continue;
@@ -1157,6 +1162,25 @@ namespace Project.Dev
                         cardView.SetHighlighted(true);
                 }
             }
+        }
+
+        private IReadOnlyList<Card> GetShownCardsForHighlight(TexasHoldemRoundPlayerState player)
+        {
+            var cards = new List<Card>(7);
+
+            foreach (Card card in player.HoleCards)
+            {
+                if (IsCardFaceUp(card))
+                    cards.Add(card);
+            }
+
+            foreach (Card card in GetVisibleBoardCards())
+            {
+                if (IsCardFaceUp(card))
+                    cards.Add(card);
+            }
+
+            return cards;
         }
 
         private IEnumerator RevealCardsForHandComplete()
@@ -1235,6 +1259,11 @@ namespace Project.Dev
         private bool ShouldHighlightShownCard(CardView cardView)
         {
             return cardView != null && cardView.IsFaceUp;
+        }
+
+        private bool IsCardFaceUp(Card card)
+        {
+            return _cardViewsByCard.TryGetValue(card, out CardView cardView) && cardView.IsFaceUp;
         }
 
         private bool ShouldShowHandRank(TexasHoldemRoundPlayerState player)
